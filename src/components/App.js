@@ -1,50 +1,35 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-
-function Index() {
-  return <h2>Home</h2>;
-}
-
-function About(props) {
-  console.log(props)
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
-
-function Id(props){
-  console.log(props)
-  const {match} = props
-  return <p>{match.params.id}</p>
-}
+import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import './App.css';
+import OneRoute from './routes';
+import { Menu } from 'antd';
+import TwoCompopnent from './twoComponent'
 
 function AppRouter() {
+  console.log(OneRoute);
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about/">About</Link>
-            </li>
-            <li>
-              <Link to="/users/">Users</Link>
-            </li>
-            <li>
-              <Link to="/ids/">ids</Link>
-            </li>
-          </ul>
+        <nav className="nav-header">
+          <Menu mode="horizontal">
+            {Object.keys(OneRoute).map((item) => {
+              return (
+                <Menu.Item key={item}>
+                  <Link to={OneRoute[item].path}>{item}</Link>
+                </Menu.Item>
+              );
+            })}
+          </Menu>
         </nav>
+        <Route path="/" exact render={(props) =><TwoCompopnent {...props} {...OneRoute.index.children}/> } />
+        <Route path="/about" render={(props) =><TwoCompopnent {...props} {...OneRoute.about.children}/> } />
+        <Route path="/news" render={(props) =><TwoCompopnent {...props}/> } />
+        <Route path="/events" render={(props) =><TwoCompopnent {...props}/> } />
 
-        <Route path="/" exact component={Index} />
+        {/* <Route path="/" exact component={Index} />
         <Route path="/about" render={(props) =><About {...props}/> } />
         <Route path="/users" children={(props) => <div>{props.match ? 'active': 'deactive'}</div>} />
-        <Route path="/ids" component={Id}></Route>
+        <Route path="/ids/:id" component={Id}></Route> */}
       </div>
     </Router>
   );
